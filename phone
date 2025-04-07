@@ -1,0 +1,25 @@
+if [ $# -eq 0 ]
+then
+    echo "Usage: phone searchfor [...searchfor]"
+    echo "(You didn't tell me what you want to search for.)"
+else
+    pattern=""
+    count=0
+
+    for arg in "$@"
+    do
+        if [ $count -ge 2 ]; then
+            break
+        fi
+
+        if [ -z "$pattern" ]; then
+            pattern="$arg"
+        else
+            pattern="$pattern|$arg"
+        fi
+
+        count=$((count + 1))
+    done
+
+    egrep -i "$pattern" mydata.txt | awk 'BEGIN {FS="|"} {print "--------->\nname :" $1 "\naddress : " $2 "\nphone :" $3 "\n<-----------"}'
+fi
